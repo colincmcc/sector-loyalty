@@ -1,3 +1,6 @@
+import gql from 'graphql-tag';
+
+
 const appResolvers =  {
   defaults: {
     networkStatus: {
@@ -6,8 +9,7 @@ const appResolvers =  {
     },
     isLoggedIn: false,
     mobileMenuOpen: false,
-    currentLocation: 1,
-
+    views: []
   },
   resolvers: {
     Mutation: {
@@ -25,9 +27,26 @@ const appResolvers =  {
         cache.writeData({ data: { mobileMenuOpen: mobileMenuOpen } });
         return null;
       },
-      selectLocation: (_, { currentLocation }, { cache }) => {
-        cache.writeData({ data: { currentLocation: currentLocation } });
-        return null;
+      updateViewStack: (_, {key, pathName}, { cache }) => {
+        const query = gql`
+          query GetViewStack {
+            views @client {
+              key
+              pathName
+            }
+          }
+        `
+        const previous = cache.readQuery({ query })
+        const nextView = {
+          key: key,
+          pathName: pathName,
+          __typename: 'ViewItem'
+        }
+        const data = {
+          views: previous.views.concat([nextView])
+        }
+        cache.writeData({data})
+        return nextView
       },
     }
   }

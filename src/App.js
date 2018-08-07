@@ -1,22 +1,30 @@
 import React, { Component } from 'react';
 import {persistor, apolloClient, cacheStorage} from './data/client'
-import styled, {ThemeProvider} from 'styled-components'
+import {ThemeProvider} from 'styled-components'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import {ApolloProvider} from 'react-apollo'
-
 import theme from './assets/theme'
 
-import asyncComponent from './features/components'
+import asyncComponent from './features/components/AsyncComponent'
 
-const AsyncHome = asyncComponent(() => import("./features/homepage/HomeContainer"))
+const AsyncHome = asyncComponent(() => import("./features/homepage/HomepageContainer"))
+const AsyncUser = asyncComponent(() => import("./features/userInfo/UserInfoContainer"))
 
 
+/** * All paths are routed through AsyncComponent => ViewComponent => Requested Container => Requested Component
+* * AsyncComponent handles codesplitting and lazy loading
+* * ViewComponent handles updating a cached view stack within Apollo
+* * Container handles the viewState depending on the position of the view in the viewStack
+* * Component renders the correct component with the proper transition
+**/
+
+// Identify current GraphQL schema.  Apollo will purge clients cache when this is updated
 const SCHEMA_VERSION = '1';
 const SCHEMA_VERSION_KEY = 'sector-schema-version'
 
 class App extends Component {
 
-
+  // Initially set loaded to false, to ensure Apollo draws from cache if available
   constructor(props) {
     super(props);
     this.state = {
@@ -24,12 +32,14 @@ class App extends Component {
       loaded: false
     };
   }
+
+  // Check to see if schema is up to date and then restore or purge cache.  Then set loaded to true
   async componentDidMount(){
     const currentVersion = await cacheStorage.getItem(SCHEMA_VERSION_KEY);
     if (currentVersion === SCHEMA_VERSION) {
       // If the current version matches the latest version,
       // we're good to go and can restore the cache.
-      await persistor.restore();
+      await persistor.purge();
     } else {
       // Otherwise, we'll want to purge the outdated persisted cache
       // and mark ourselves as having updated to the latest version.
@@ -43,6 +53,7 @@ class App extends Component {
     });
   }
 
+  // Handle modal pop
   previousLocation = this.props.location;
   componentWillUpdate(nextProps) {
     const { location } = this.props;
@@ -71,8 +82,9 @@ class App extends Component {
         <ThemeProvider theme={theme} >
           <div className="App">
           <Switch location={isModal ? this.previousLocation : location}>
-            <Route exact path="/" component={AsyncHome} />
+            <Route exact path="/" component={AsyncHome}  />
             <Route path="/Home" component={AsyncHome} />
+            <Route path="/User" component={AsyncUser} />
           </Switch>
           </div>
       </ThemeProvider>

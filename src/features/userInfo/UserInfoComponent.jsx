@@ -1,24 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-const HomepageComponent = props => {
+const UserInfoComponent = props => {
   return (
-    <HomepageWrapper>
+    <UserInfoWrapper>
       <p>This is a test</p>
       <div>
-        <Link to="/User"> User </Link>
+        <Link to="/Home"> Home </Link>
       </div>
       <div>
         <button onClick={() => props.goBack()}>> Go Back </button>
       </div>
-    </HomepageWrapper>
+    </UserInfoWrapper>
   );
 };
 
-export default HomepageComponent;
+export default UserInfoComponent;
 
-const HomepageWrapper = styled.div`
+const UserInfoWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   margin: auto;

@@ -1,17 +1,25 @@
 import React, { Component } from "react";
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import { withRouter } from 'react-router-dom'
+import ViewComponent from './ViewComponent'
+
+
+const ADD_VIEW = gql`
+  mutation updateViewStack($key: String!, $pathName: String!) {
+    updateViewStack(key: $key, pathName: $pathName) @client
+  }
+`
 
 export default function asyncComponent(importComponent) {
   class AsyncComponent extends Component {
-    constructor(props) {
-      super(props);
 
-      this.state = {
-        component: null
-      };
-    }
+    state = {
+      component: null
+    };
 
     async componentDidMount() {
-      const { default: component } = await importComponent();
+      const { default: component } = await importComponent()
 
       this.setState({
         component: component
@@ -19,11 +27,18 @@ export default function asyncComponent(importComponent) {
     }
 
     render() {
-      const C = this.state.component;
+      const C = this.state.component
 
-      return C ? <C {...this.props} /> : null;
+      const componentWithMutation = (
+        <Mutation mutation={ADD_VIEW}>
+
+        {(updateViewStack) => <ViewComponent component={C} updateViewStack={updateViewStack} {...this.props} />}
+
+        </Mutation>
+      )
+      return C ?  componentWithMutation : null
     }
-  }
 
-  return AsyncComponent;
+  }
+  return withRouter(AsyncComponent)
 }

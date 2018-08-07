@@ -1,0 +1,37 @@
+{
+  "Styled Component Theme @media": {
+    "prefix": "smedia",
+    "body": [
+      "\\${props => props.theme.media.${1|phone_only,tablet_portrait_up,tablet_landscape_up,desktop_up,large_up|}`$2`\\};",
+      "$3"
+    ]
+  },
+  "Styled Component Theme Color": {
+    "prefix": "scolor",
+    "body": [
+      "\\${props => props.theme.colors.${1|theme,darkTheme,lightTheme,lightAccent,darkAccent,blackTheme,whiteTheme,darkGray|}\\};",
+      "$2"
+    ]
+  },
+  "Styled Component Theme Font": {
+    "prefix": "ssfont",
+    "body": [
+      "\\${props => props.theme.fontSizes.${1|heading,subheading,medium,text|}.${2|size,lineHeight,weight,letterSpacing|}\\};",
+      "$3"
+    ]
+  },
+  "Styled Component Theme Font Full Style": {
+    "prefix": "sfont",
+    "body": [
+      "\\${props => props.theme.fontStyles.${1|heading,subheading,medium,text,smallHeading,small|}\\};",
+      "$3"
+    ]
+  },
+  "Styled Component Theme Full Components": {
+    "prefix": "sstyle",
+    "body": [
+      "\\${props => props.theme.components.${1|heading,subheading,medium,text,smallHeading,small|}\\};",
+      "$3"
+    ]
+  }
+}

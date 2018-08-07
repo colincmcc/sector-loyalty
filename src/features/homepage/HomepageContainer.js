@@ -1,11 +1,7 @@
 import React from 'react'
-
-const HomepageContainer = () => {
-  return (
-    <div>
-
-    </div>
-  )
+import HomepageComponent from './HomepageComponent'
+const HomepageContainer = (props) => {
+  return <HomepageComponent {...props} />
 }
-
+HomepageContainer.displayName = 'homepage'
 export default HomepageContainer

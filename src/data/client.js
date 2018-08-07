@@ -50,13 +50,18 @@ export const cacheStorage = window.localStorage
     type NetworkStatus {
       isConnected: Boolean!
     }
+    type View {
+      key: Int!
+      pathName: String!
+    }
 
 
     type Mutation {
+      updateViewStack(key: String!, pathName: String!) : View
     }
 
     type Query {
-
+      views: [View]
     }
 
   `;
@@ -78,7 +83,7 @@ export const cacheStorage = window.localStorage
         cache
       }),
       new HttpLink({
-        uri: prod.graphQLEndpoint,
+        uri: dev.graphQLEndpoint,
       })
     ]),
     cache
