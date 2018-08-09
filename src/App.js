@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
-import {persistor, apolloClient, cacheStorage} from './data/client'
-import {ThemeProvider} from 'styled-components'
-import { Switch, Route, withRouter } from 'react-router-dom'
+
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
+
 import {ApolloProvider} from 'react-apollo'
+import {ThemeProvider} from 'styled-components'
+
+import {persistor, apolloClient, cacheStorage} from './data/client'
 import theme from './assets/theme'
 
+import Transitions from './transitions'
 import asyncComponent from './features/components/AsyncComponent'
 
 const AsyncHome = asyncComponent(() => import("./features/homepage/HomepageContainer"))
@@ -21,6 +25,9 @@ const AsyncUser = asyncComponent(() => import("./features/userInfo/UserInfoConta
 // Identify current GraphQL schema.  Apollo will purge clients cache when this is updated
 const SCHEMA_VERSION = '1';
 const SCHEMA_VERSION_KEY = 'sector-schema-version'
+
+
+
 
 class App extends Component {
 
@@ -39,7 +46,7 @@ class App extends Component {
     if (currentVersion === SCHEMA_VERSION) {
       // If the current version matches the latest version,
       // we're good to go and can restore the cache.
-      await persistor.purge();
+      await persistor.purge(); // TODO set to restore()
     } else {
       // Otherwise, we'll want to purge the outdated persisted cache
       // and mark ourselves as having updated to the latest version.
@@ -71,6 +78,8 @@ class App extends Component {
 
     if(!loaded) return <div>Loading...</div>
     const { location } = this.props;
+
+    // * if it's a modal popup keep the background location
     const isModal = !!(
       location.state &&
       location.state.modal &&
@@ -80,13 +89,16 @@ class App extends Component {
     return (
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme} >
-          <div className="App">
-          <Switch location={isModal ? this.previousLocation : location}>
-            <Route exact path="/" component={AsyncHome}  />
-            <Route path="/Home" component={AsyncHome} />
-            <Route path="/User" component={AsyncUser} />
-          </Switch>
-          </div>
+        <Route
+          render={({ location }) => (
+            <Transitions pageKey={location.key} {...location.state}>
+              <Switch location={isModal ? this.previousLocation : location}>
+                <Redirect exact from="/" to="/Home" />
+                <Route path="/Home" component={AsyncHome} />
+                <Route path="/User" component={AsyncUser} />
+              </Switch>
+            </Transitions>
+          )} />
       </ThemeProvider>
       </ApolloProvider>
     );

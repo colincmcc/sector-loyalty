@@ -9,7 +9,9 @@ const appResolvers =  {
     },
     isLoggedIn: false,
     mobileMenuOpen: false,
-    views: []
+    views: [],
+    currentView: null,
+    prevView: null
   },
   resolvers: {
     Mutation: {
@@ -27,7 +29,7 @@ const appResolvers =  {
         cache.writeData({ data: { mobileMenuOpen: mobileMenuOpen } });
         return null;
       },
-      updateViewStack: (_, {key, pathName}, { cache }) => {
+      addToViewStack: (_, {key, pathName, component}, { cache }) => {
         const query = gql`
           query GetViewStack {
             views @client {
@@ -37,16 +39,38 @@ const appResolvers =  {
           }
         `
         const previous = cache.readQuery({ query })
+
         const nextView = {
           key: key,
           pathName: pathName,
           __typename: 'ViewItem'
         }
+        const prevView = previous.views.length > 0 ? previous.views.pop() : {key: "", pathName: "", __typename: "ViewItem"}
+        const updated = previous.views.concat([nextView])
         const data = {
-          views: previous.views.concat([nextView])
+          prevView: prevView,
+          views: updated,
+          currentView: nextView
         }
         cache.writeData({data})
-        return nextView
+        return prevView
+      },
+      removeFromViewStack: (_, { cache }) => {
+        const query = gql`
+          query GetViewStack {
+            views @client {
+              key
+              pathName
+            }
+          }
+        `
+        const previous = cache.readQuery({ query })
+        const updated = previous.views.slice(0, -1)
+        const data = {
+          views: updated
+        }
+        cache.writeData({data})
+        return null
       },
     }
   }

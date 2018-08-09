@@ -22,7 +22,7 @@ export const cacheStorage = window.localStorage
 
   /**
  * * Cache and persistence setup
- * * persisted data is cleared if there is a new Schema version
+ * ! persisted data is cleared if there is a new Schema version set in the apps index.js
 */
   const cache = new InMemoryCache({
     cacheRedirects: {
@@ -55,13 +55,15 @@ export const cacheStorage = window.localStorage
       pathName: String!
     }
 
-
     type Mutation {
-      updateViewStack(key: String!, pathName: String!) : View
+      addToViewStack(key: String!, pathName: String!) : View
+      removeFromViewStack() : View
     }
 
     type Query {
       views: [View]
+      prevView: View
+      currentView: View
     }
 
   `;
