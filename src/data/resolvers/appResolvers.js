@@ -29,7 +29,7 @@ const appResolvers =  {
         cache.writeData({ data: { mobileMenuOpen: mobileMenuOpen } });
         return null;
       },
-      addToViewStack: (_, {key, pathName, component}, { cache }) => {
+      addToViewStack: (_, {key, pathName}, { cache }) => {
         const query = gql`
           query GetViewStack {
             views @client {

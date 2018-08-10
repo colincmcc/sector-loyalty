@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const HomepageComponent = props => {
   const { animateNavigation, goBack } = props;
   return (
-    <HomepageWrapper id="home">
+    <HomepageWrapper className="content" id="home">
       <Content>
         <p>This is a test</p>
         <div>
@@ -24,13 +24,7 @@ const HomepageComponent = props => {
 export default HomepageComponent;
 
 const HomepageWrapper = styled.div`
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  top: 0;
-  left: 0;
+  padding: 0 24px;
 `;
 
-const Content = styled.div`
-  margin: auto;
-`;
+const Content = styled.div``;

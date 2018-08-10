@@ -33,16 +33,26 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 * * STYLES
 */
 const colors = {
-
+  theme: "#fffff",
+  lightAccent: "",
+  darkAccent: "",
+  blackTheme: "#00000",
+  whiteTheme: "#fffff"
 }
 
 const fontStyles = {
-  toolBarHeader: {
-
-  },
-  toolBarSubHeader: {
-
-  }
+  heading: css`
+    font-family: "ITC American Typewriter Std";
+    font-size: 48px;
+    color: ${colors.blackTheme};
+    font-weight: bold;
+  `,
+  subHeading: css`
+    font-family: "ITC American Typewriter Std";
+    font-size: 20px;
+    color: ${colors.blackTheme};
+    font-weight: regular;
+  `
 }
 
 /*

@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { slideLeft, slideRight } from "../../transitions";
 
 const UserInfoComponent = props => {
   const { animateNavigation, goBack } = props;
@@ -26,14 +25,7 @@ const UserInfoComponent = props => {
 export default UserInfoComponent;
 
 const UserInfoWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
+  padding: 0 24px;
 `;
 
-const Content = styled.div`
-  margin: auto;
-`;
+const Content = styled.div``;

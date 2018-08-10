@@ -1,3 +1,35 @@
+@font-face {
+  font-family: "ITC American Typewriter Std";
+  src: local("American Typewriter Std Med"),
+    url(./assets/fonts/AmericanTypewriterStd-Med.otf) format(otf);
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "ITC American Typewriter Std";
+  src: local("American Typewriter Std Cn"),
+    url(./assets/fonts/AmericanTypewriterStd-BdCnd.otf) format(otf);
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Gin-Rough";
+  src: url(./assets/fonts/Gin-Rough.otf) format(otf),
+    url(./assets/fonts/Gin-Rough.woff) format(woff);
+  font-style: normal;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Gin-Rough";
+  src: url(./assets/fonts/Gin-Rough.otf) format("opentype"),
+    url(./assets/fonts/Gin-Rough.woff) format("woff"),
+    url(./assets/fonts/Gin-Rough.ttf) format("truetype"),
+    url(./assets/fonts/Gin-Rough.svg) format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   margin: 0;
   padding: 0;
