@@ -1,0 +1,19 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "flowtype"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    "max-len": [1, 120, 2, { "ignoreComments": true }],
+    "jsx-a11y/href-no-hash": [0],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+  },
+  "extends": ["airbnb", "plugin:flowtype/recommended"],
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}

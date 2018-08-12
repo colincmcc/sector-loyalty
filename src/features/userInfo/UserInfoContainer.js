@@ -1,21 +1,11 @@
-import React, { Component } from 'react'
-import UserInfoComponent from './UserInfoComponent'
+//
+// @flow
+//
 
-class UserInfoContainer extends Component {
+import React from 'react';
+import UserInfoComponent from './UserInfoComponent';
 
-  state = {
-    viewState: "initial"
-  }
-  static getDerivedStateFromProps(props, state){
 
-    return null;
-  }
+const UserInfoContainer = props => <UserInfoComponent {...props} />;
 
-  render(){
-    return <UserInfoComponent {...this.props} />
-
-  }
-
-}
-
-export default UserInfoContainer
+export default UserInfoContainer;

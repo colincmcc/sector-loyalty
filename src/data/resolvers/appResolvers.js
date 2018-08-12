@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 
-const appResolvers =  {
+const appResolvers = {
   defaults: {
     networkStatus: {
       __typename: 'NetworkStatus',
@@ -11,7 +11,7 @@ const appResolvers =  {
     mobileMenuOpen: false,
     views: [],
     currentView: null,
-    prevView: null
+    prevView: null,
   },
   resolvers: {
     Mutation: {
@@ -19,17 +19,17 @@ const appResolvers =  {
         const data = {
           networkStatus: {
             __typename: 'NetworkStatus',
-            isConnected
+            isConnected,
           },
         };
         cache.writeData({ data });
         return null;
       },
       updateMobileMenuStatus: (_, { mobileMenuOpen }, { cache }) => {
-        cache.writeData({ data: { mobileMenuOpen: mobileMenuOpen } });
+        cache.writeData({ data: { mobileMenuOpen } });
         return null;
       },
-      addToViewStack: (_, {key, pathName}, { cache }) => {
+      addToViewStack: (_, { key, pathName }, { cache }) => {
         const query = gql`
           query GetViewStack {
             views @client {
@@ -37,23 +37,24 @@ const appResolvers =  {
               pathName
             }
           }
-        `
-        const previous = cache.readQuery({ query })
+        `;
+        const previous = cache.readQuery({ query });
 
         const nextView = {
-          key: key,
-          pathName: pathName,
-          __typename: 'ViewItem'
-        }
-        const prevView = previous.views.length > 0 ? previous.views.pop() : {key: "", pathName: "", __typename: "ViewItem"}
-        const updated = previous.views.concat([nextView])
+          key,
+          pathName,
+          __typename: 'ViewItem',
+        };
+        const prevView = previous.views.length > 0 ? previous.views.slice(-1)[0] : { key: '', pathName: '', __typename: 'ViewItem' };
+        const updated = previous.views.concat([nextView]);
+        previous.views.length > 3 ? previous.views.shift() : null;
         const data = {
-          prevView: prevView,
+          prevView,
           views: updated,
-          currentView: nextView
-        }
-        cache.writeData({data})
-        return prevView
+          currentView: nextView,
+        };
+        cache.writeData({ data });
+        return prevView;
       },
       removeFromViewStack: (_, { cache }) => {
         const query = gql`
@@ -63,17 +64,17 @@ const appResolvers =  {
               pathName
             }
           }
-        `
-        const previous = cache.readQuery({ query })
-        const updated = previous.views.slice(0, -1)
+        `;
+        const previous = cache.readQuery({ query });
+        const updated = previous.views.slice(0, -1);
         const data = {
-          views: updated
-        }
-        cache.writeData({data})
-        return null
+          views: updated,
+        };
+        cache.writeData({ data });
+        return null;
       },
-    }
-  }
-}
+    },
+  },
+};
 
-export default appResolvers
+export default appResolvers;

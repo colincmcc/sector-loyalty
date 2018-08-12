@@ -9,36 +9,35 @@ import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { withClientState } from 'apollo-link-state';
 import { ApolloLink } from 'apollo-link';
-import merge from 'lodash.merge'
-import { dev, prod } from "./config";
+import merge from 'lodash.merge';
+import { dev, prod } from './config'; // eslint-disable-line
 
-import homeResolvers from './resolvers/homeResolvers'
-import appResolvers from './resolvers/appResolvers'
-
-
-
-export const cacheStorage = window.localStorage
+import homeResolvers from './resolvers/homeResolvers';
+import appResolvers from './resolvers/appResolvers';
 
 
-  /**
+export const cacheStorage = window.localStorage;
+
+
+/**
  * * Cache and persistence setup
  * ! persisted data is cleared if there is a new Schema version set in the apps index.js
 */
-  const cache = new InMemoryCache({
-    cacheRedirects: {
-      Query: {
-        foodsBy: (_, { id }) => toIdValue(cache.config.dataIdFromObject({ __typename: 'Food', id })),
-      },
-
+const cache = new InMemoryCache({
+  cacheRedirects: {
+    Query: {
+      foodsBy: (_, { id }) => toIdValue(cache.config.dataIdFromObject({ __typename: 'Food', id })),
     },
-    dataIdFromObject: object => object.key || null
-  });
+
+  },
+  dataIdFromObject: object => object.key || null,
+});
 
 
-  export const persistor = new CachePersistor({
-    cache,
-    storage: cacheStorage,
-  });
+export const persistor = new CachePersistor({
+  cache,
+  storage: cacheStorage,
+});
 
 
   /**
@@ -46,7 +45,7 @@ export const cacheStorage = window.localStorage
    *
   */
 
-  const typeDefs = `
+const typeDefs = `
     type NetworkStatus {
       isConnected: Boolean!
     }
@@ -68,28 +67,24 @@ export const cacheStorage = window.localStorage
 
   `;
 
-  export const apolloClient = new ApolloClient({
-    link: ApolloLink.from([
-      onError(({ graphQLErrors, networkError }) => {
-        if (graphQLErrors) {
-          graphQLErrors.map(({ message, locations, path }) =>
-            console.log(
-              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            ),
-          )}
-        if (networkError) console.log(`[Network error]: ${networkError}`);
-      }),
-      withClientState({
-        ...merge(appResolvers, homeResolvers),
-        typeDefs,
-        cache
-      }),
-      new HttpLink({
-        uri: dev.graphQLEndpoint,
-      })
-    ]),
-    cache
-  });
-
-
-
+export const apolloClient = new ApolloClient({
+  link: ApolloLink.from([
+    onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) => console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+        ));
+      }
+      if (networkError) console.log(`[Network error]: ${networkError}`);
+    }),
+    withClientState({
+      ...merge(appResolvers, homeResolvers),
+      typeDefs,
+      cache,
+    }),
+    new HttpLink({
+      uri: dev.graphQLEndpoint,
+    }),
+  ]),
+  cache,
+});

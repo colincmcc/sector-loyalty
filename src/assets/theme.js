@@ -11,6 +11,8 @@ const sizes = {
   phone_only: 599
 }
 
+
+// Function to convert the above sizes object to em and set breakpoints either above or below values
 const media = Object.keys(sizes).reduce((acc, label) => {
   if(acc[label] !== "phone_only"){
   acc[label] = (...args) => css`

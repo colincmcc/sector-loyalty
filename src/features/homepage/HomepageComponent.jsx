@@ -1,20 +1,37 @@
-import React from "react";
-import styled from "styled-components";
+//
+// @flow
+//
 
-const HomepageComponent = props => {
+import React from 'react';
+import styled from 'styled-components';
+
+type Props = {
+  animateNavigation: Function,
+  goBack: Function
+}
+
+const HomepageComponent = (props: Props) => {
   const { animateNavigation, goBack } = props;
   return (
     <HomepageWrapper className="content" id="home">
       <Content>
-        <p>This is a test</p>
+        <p>
+          This is a test
+        </p>
         <div>
-          <button onClick={() => animateNavigation("/Home")}> Home </button>
+          <button type="button" onClick={() => animateNavigation('/Home')}>
+            Home
+          </button>
         </div>
         <div>
-          <button onClick={() => animateNavigation("/User")}>User</button>
+          <button type="button" onClick={() => animateNavigation('/User')}>
+            User
+          </button>
         </div>
         <div>
-          <button onClick={() => goBack()}>> Go Back </button>
+          <button type="button" onClick={() => goBack()}>
+            Go Back
+          </button>
         </div>
       </Content>
     </HomepageWrapper>
@@ -24,7 +41,7 @@ const HomepageComponent = props => {
 export default HomepageComponent;
 
 const HomepageWrapper = styled.div`
-  padding: 0 24px;
+  margin-top: 48px;
 `;
 
 const Content = styled.div``;
