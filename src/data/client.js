@@ -52,7 +52,6 @@ const typeDefs = `
     type View {
       key: Int!
       pathName: String!
-      title: String!
     }
 
     type Mutation {

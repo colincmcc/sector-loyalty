@@ -16,17 +16,14 @@ const GET_VIEWS = gql`
   currentView @client {
     key
     pathName
-    title
   }
   prevView @client {
     key
     pathName
-    title
   }
   views @client {
     key
     pathName
-    title
   }
 }
 `;
@@ -44,9 +41,8 @@ type State = {
   headerState: number,
   prevView: {
     key: string,
-    pathName: string,
-    title: string
-  }
+    pathName: string
+    }
 }
 
 class ViewComponent extends Component<Props, State> {
@@ -57,7 +53,6 @@ class ViewComponent extends Component<Props, State> {
     prevView: {
       key: '',
       pathName: '',
-      title: '',
     },
   };
 
@@ -98,10 +93,9 @@ class ViewComponent extends Component<Props, State> {
   };
 
   // Using this function instead of react-router Link to navigate
-  animateNavigation = (path) => {
+  animateNavigation = (path, title) => {
     const { prevView } = this.state;
     const { history } = this.props;
-
     const goingBack = prevView.pathName === path;
 
     history.push({

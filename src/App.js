@@ -111,9 +111,10 @@ Loading...
        <ThemeProvider theme={theme}>
          <AppWrapper>
            <Route
-             render={() => (
+             render={({ location }) => (
                <div>
                  <HeaderContainer location={location} />
+
                  <BodyTransition pageKey={location.key} {...location.state}>
                    <Switch
                      location={isModal ? this.previousLocation : location}

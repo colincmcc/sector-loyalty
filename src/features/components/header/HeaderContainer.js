@@ -25,9 +25,7 @@ const GET_VIEWS = gql`
 `;
 
 type Props = {
-  location: Object,
-  title: string
-}
+  location: Object}
 
 // Header state is defined as follows
 // 0 = initial state (do nothing)
@@ -39,17 +37,19 @@ const HeaderContainer = (props: Props) => (
   <Query query={GET_VIEWS}>
     {
     ({ data, loading, error }) => {
-      if (!loading) {
-        const { location, title } = props;
+      if (data) {
+        const { location } = props;
         const { views, prevView, currentView } = data;
-        let headerState = 0; // initial state
 
         console.log(views);
-        if (location.pathname !== prevView.pathName && views.length > 1) headerState = 1;
-        if (location.pathname === prevView.pathName) headerState = 2;
 
-        return <Header {...props} />;
+
+        return (
+          views.map((view, index) => (
+            <Header index={index} title={view.pathName.slice(1, view.pathName.length)} />
+          )));
       }
+      return null;
     }
   }
   </Query>

@@ -35,7 +35,6 @@ const appResolvers = {
             views @client {
               key
               pathName
-              title
             }
           }
         `;
@@ -44,7 +43,6 @@ const appResolvers = {
         const nextView = {
           key,
           pathName,
-          title,
           __typename: 'ViewItem',
         };
         const prevView = previous.views.length > 0 ? previous.views.slice(-1)[0] : { key: '', pathName: '', __typename: 'ViewItem' };
