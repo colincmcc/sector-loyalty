@@ -4,22 +4,20 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { HeaderTransition } from '../../../transitions';
 
 type Props = {
   title: string,
   prevView: Object,
   location: Object
 }
+
 const Header = (props: Props) => {
   const { title, prevView, location } = props;
 
   return (
     <TopBarWrapper>
       <PageTitle>
-        <HeaderTransition pageKey={location.key} {...location.state}>
           About
-        </HeaderTransition>
       </PageTitle>
     </TopBarWrapper>
   );

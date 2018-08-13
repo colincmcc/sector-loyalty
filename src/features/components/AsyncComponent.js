@@ -15,6 +15,7 @@ const ADD_VIEW = gql`
   }
 `;
 
+
 export default function asyncComponent(importComponent) {
   class AsyncComponent extends Component {
     state = {

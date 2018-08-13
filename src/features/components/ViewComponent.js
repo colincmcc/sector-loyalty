@@ -16,14 +16,17 @@ const GET_VIEWS = gql`
   currentView @client {
     key
     pathName
+    title
   }
   prevView @client {
     key
     pathName
+    title
   }
   views @client {
     key
     pathName
+    title
   }
 }
 `;
@@ -139,6 +142,6 @@ padding-left: 24px;
 const Content = styled.div`
 position: relative;
 max-width: 70rem;
-margin: 48px auto 64px auto;
+margin: 134px auto 64px auto;
 padding: 0 24px;
 `;

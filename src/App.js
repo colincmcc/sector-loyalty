@@ -16,7 +16,7 @@ import theme from './assets/theme';
 
 import { BodyTransition } from './transitions';
 import asyncComponent from './features/components/AsyncComponent';
-import Header from './features/components/header/Header';
+import HeaderContainer from './features/components/header/HeaderContainer';
 
 const AsyncHome = asyncComponent(() => import('./features/homepage/HomepageContainer'));
 const AsyncUser = asyncComponent(() => import('./features/userInfo/UserInfoContainer'));
@@ -104,15 +104,16 @@ Loading...
       && location.state.modal
       && this.previousLocation !== location
    );
-   console.log(typeof (client));
+
+   // Wrapping the app in a Route guarantees that it will have a location key, which is used for transitions
    return (
      <ApolloProvider client={client}>
        <ThemeProvider theme={theme}>
          <AppWrapper>
            <Route
-             render={({ location }) => (
+             render={() => (
                <div>
-                 <Header location={location} />
+                 <HeaderContainer location={location} />
                  <BodyTransition pageKey={location.key} {...location.state}>
                    <Switch
                      location={isModal ? this.previousLocation : location}
