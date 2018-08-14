@@ -20,6 +20,8 @@ import HeaderContainer from './features/components/header/HeaderContainer';
 
 const AsyncHome = asyncComponent(() => import('./features/homepage/HomepageContainer'));
 const AsyncUser = asyncComponent(() => import('./features/userInfo/UserInfoContainer'));
+const AsyncUserDetail = asyncComponent(() => import('./features/userInfo/UserDetail'));
+
 
 /** * All paths are routed through AsyncComponent => ViewComponent => Requested Container => Requested Component
  * * AsyncComponent handles codesplitting and lazy loading
@@ -106,26 +108,32 @@ Loading...
    );
 
    // Wrapping the app in a Route guarantees that it will have a location key, which is used for transitions
+
+   // Two different methods are used for transitions.
+   // HeaderContainer renders the last three view titles, and animates based on their current index in the stack.
+   // The body of the app uses Transition Group to render and animate the incomming and exiting component respectively.
+   // This ensures that the more costly content body is only holding 1-2 rendered components at a time.
+
+   // TODO: move routing logic into separate file
+
    return (
      <ApolloProvider client={client}>
        <ThemeProvider theme={theme}>
          <AppWrapper>
-           <Route
-             render={({ location }) => (
-               <div>
-                 <HeaderContainer location={location} />
+           <Route render={({ location }) => (
+             <div>
+               <HeaderContainer location={location} />
 
-                 <BodyTransition pageKey={location.key} {...location.state}>
-                   <Switch
-                     location={isModal ? this.previousLocation : location}
-                   >
-                     <Redirect exact from="/" to="/Home" />
-                     <Route path="/Home" component={AsyncHome} />
-                     <Route path="/User" component={AsyncUser} />
-                   </Switch>
-                 </BodyTransition>
-               </div>
-             )}
+               <BodyTransition pageKey={location.key} {...location.state}>
+                 <Switch location={isModal ? this.previousLocation : location}>
+                   <Redirect exact from="/" to="/Home" />
+                   <Route path="/Home" render={() => <AsyncHome title="Home" text="Welcome" />} />
+                   <Route path="/User" render={() => <AsyncUser title="User" text="" />} />
+                   <Route path="/UserDetail" render={() => <AsyncUserDetail title="User Detail" text="" />} />
+                 </Switch>
+               </BodyTransition>
+             </div>
+           )}
            />
          </AppWrapper>
        </ThemeProvider>
@@ -139,5 +147,6 @@ export default withRouter(App);
 const AppWrapper = styled.div`
   width: 100vw;
   height: 100vh;
-  position: fixed;
+  position: relative;
+
 `;

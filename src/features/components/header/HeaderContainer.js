@@ -5,6 +5,7 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
+import shortid from 'shortid';
 import Header from './Header';
 
 const GET_VIEWS = gql`
@@ -12,41 +13,42 @@ const GET_VIEWS = gql`
   currentView @client {
     key
     pathName
+    title
+    text
   }
   prevView @client {
     key
     pathName
+    title
+    text
   }
   views @client {
     key
     pathName
+    title
+    text
   }
 }
 `;
 
 type Props = {
-  location: Object}
-
-// Header state is defined as follows
-// 0 = initial state (do nothing)
-// 1 = going back & move subheader into header position
-// 1 = going forward & move header to subHeader
-// 2 = going deeper.  Move header to subheader and move old subheader off screen
+  location: Object
+}
 
 const HeaderContainer = (props: Props) => (
   <Query query={GET_VIEWS}>
     {
     ({ data, loading, error }) => {
       if (data) {
-        const { location } = props;
-        const { views, prevView, currentView } = data;
+        const { state } = props.location;
+        const { views } = data;
 
-        console.log(views);
+        const isGoingBack = state ? state.goingBack : false;
 
 
         return (
           views.map((view, index) => (
-            <Header index={index} title={view.pathName.slice(1, view.pathName.length)} />
+            <Header key={shortid.generate()} isGoingBack={isGoingBack} index={index} view={view} allViews={views} />
           )));
       }
       return null;

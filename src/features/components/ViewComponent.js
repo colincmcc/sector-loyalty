@@ -7,7 +7,8 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 
 import { slideLeft, slideRight } from '../../transitions';
-import Header from './header/Header';
+
+import HeaderContainer from './header/HeaderContainer';
 
 // TODO: move mutation call from AsyncComponent to ViewComponent to separate concerns
 
@@ -16,14 +17,20 @@ const GET_VIEWS = gql`
   currentView @client {
     key
     pathName
+    title
+    text
   }
   prevView @client {
     key
     pathName
+    title
+    text
   }
   views @client {
     key
     pathName
+    title
+    text
   }
 }
 `;
@@ -34,14 +41,18 @@ type Props = {
   location: Object,
   addToViewStack: Function,
   client: Function,
-  component: React.Component
+  component: React.Component,
+  title: string,
+  text: string
 }
 
 type State = {
   headerState: number,
   prevView: {
     key: string,
-    pathName: string
+    pathName: string,
+    title: string,
+    text: string
     }
 }
 
@@ -53,18 +64,24 @@ class ViewComponent extends Component<Props, State> {
     prevView: {
       key: '',
       pathName: '',
+      title: '',
+      text: '',
     },
   };
 
   // On component mount update the cached viewstack, view the updated stack,
   // and use the last two views to determine the viewState/transition effect
   async componentDidMount() {
-    const { location, addToViewStack, client } = this.props;
+    const {
+      location, addToViewStack, client, title, text,
+    } = this.props;
     const viewKey = location.key ? location.key : 'initialView';
 
     const variables = {
       pathName: location.pathname,
       key: viewKey,
+      title,
+      text,
     };
 
     // First do a  GraphQL mutation with defined variables
@@ -93,21 +110,24 @@ class ViewComponent extends Component<Props, State> {
   };
 
   // Using this function instead of react-router Link to navigate
-  animateNavigation = (path, title) => {
+  animateNavigation = (path, title, text) => {
     const { prevView } = this.state;
     const { history } = this.props;
+
     const goingBack = prevView.pathName === path;
+    const animationDirection = goingBack ? slideRight : slideLeft;
 
     history.push({
       pathname: path,
-      state: goingBack ? slideRight : slideLeft,
+      state: {
+        title, text, goingBack, ...animationDirection,
+      },
     });
   }
 
 
   render() {
     const { component: C } = this.props;
-    const { prevView } = this.state;
 
     return (
       <PageWrapper id="main">
@@ -115,7 +135,6 @@ class ViewComponent extends Component<Props, State> {
           <C
             {...this.props}
             animateNavigation={this.animateNavigation}
-            goBack={this.goBack}
           />
         </Content>
       </PageWrapper>
@@ -127,15 +146,15 @@ export default ViewComponent;
 
 
 const PageWrapper = styled.div`
-width: 100%;
-height: calc(100vh - 128px - 24px);
-flex: 1;
-position: absolute;
-padding-left: 24px;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  position: absolute;
+  background-color: white;
 `;
 const Content = styled.div`
 position: relative;
+height: 100%;
 max-width: 70rem;
 margin: 134px auto 64px auto;
-padding: 0 24px;
 `;

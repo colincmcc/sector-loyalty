@@ -7,7 +7,6 @@ const childFactoryCreator = props => child => React.cloneElement(child, props);
 
 
 // The location prop is immutable, so the exiting and entering components will have a unique prop that can be used as a key
-//
 
 
 export const HeaderTransition = ({
@@ -41,8 +40,7 @@ export const BodyTransition = ({
   </TransitionGroup>
 );
 
-
+// Body
 export { default as slideRight } from './slideRight';
-
 export { default as slideLeft } from './slideLeft';
 export { default as scale } from './scale';

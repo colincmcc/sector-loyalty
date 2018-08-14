@@ -10,8 +10,8 @@ import ViewComponent from './ViewComponent';
 
 
 const ADD_VIEW = gql`
-  mutation addToViewStack($key: String!, $pathName: String!) {
-    addToViewStack(key: $key, pathName: $pathName) @client
+  mutation addToViewStack($key: String!, $pathName: String!, $title: String!, $text: String!) {
+    addToViewStack(key: $key, pathName: $pathName, title: $title, text: $text) @client
   }
 `;
 

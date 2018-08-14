@@ -9,9 +9,9 @@ import Button from '../components/buttons/Button';
 type Props = {
   animateNavigation: Function,
   goBack: Function
-}
+};
 
-const UserInfoComponent = (props: Props) => {
+const UserDetail = (props: Props) => {
   const { animateNavigation, goBack } = props;
 
   return (
@@ -28,10 +28,11 @@ This is a test
   );
 };
 
-export default UserInfoComponent;
+export default UserDetail;
 
 const UserInfoWrapper = styled.div`
   margin-top: 48px;
+  height: 100%;
 `;
 
 const Content = styled.div``;

@@ -4,6 +4,8 @@
 
 import React from 'react';
 import styled from 'styled-components';
+import CurrentPointsCard from './components/CurrentPointsCard';
+import Button from '../components/buttons/Button';
 
 type Props = {
   animateNavigation: Function,
@@ -13,35 +15,22 @@ type Props = {
 const HomepageComponent = (props: Props) => {
   const { animateNavigation, goBack } = props;
   return (
-    <HomepageWrapper className="content" id="home">
+<HomepageWrapper className="content" id="home">
       <Content>
-        <p>
-          This is a test
-        </p>
-        <div>
-          <button type="button" onClick={() => animateNavigation('/Home')}>
-            Home
-          </button>
-        </div>
-        <div>
-          <button type="button" onClick={() => animateNavigation('/User')}>
-            User
-          </button>
-        </div>
-        <div>
-          <button type="button" onClick={() => goBack()}>
-            Go Back
-          </button>
-        </div>
+        <CurrentPointsCard />
+        <Button onClick={() => animateNavigation("/UserDetail")} buttonText="UserDetail" />
+        <Button onClick={() => animateNavigation("/Home")} buttonText="Home" />
+        <Button onClick={() => animateNavigation("/User")} buttonText="User" />
       </Content>
     </HomepageWrapper>
-  );
+);
 };
 
 export default HomepageComponent;
 
 const HomepageWrapper = styled.div`
   margin-top: 48px;
+  height: 100%;
 `;
 
 const Content = styled.div``;

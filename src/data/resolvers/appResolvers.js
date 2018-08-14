@@ -29,12 +29,16 @@ const appResolvers = {
         cache.writeData({ data: { mobileMenuOpen } });
         return null;
       },
-      addToViewStack: (_, { key, pathName, title }, { cache }) => {
+      addToViewStack: (_, {
+        key, pathName, title, text,
+      }, { cache }) => {
         const query = gql`
           query GetViewStack {
             views @client {
               key
               pathName
+              title
+              text
             }
           }
         `;
@@ -43,15 +47,20 @@ const appResolvers = {
         const nextView = {
           key,
           pathName,
+          title,
+          text,
           __typename: 'ViewItem',
         };
-        const prevView = previous.views.length > 0 ? previous.views.slice(-1)[0] : { key: '', pathName: '', __typename: 'ViewItem' };
+        const prevView = previous.views.length > 0 ? previous.views[0] : {
+          key: '', pathName: '', title: '', text: '', __typename: 'ViewItem',
+        };
 
         // There's a possibility of future React Native code sharing React Native may have
         // an issue with long lists and this view list could get pretty long over time
-        if (previous.views.length > 3) previous.views.shift();
+        if (previous.views.length > 2) previous.views.pop();
 
-        const updated = previous.views.concat([nextView]);
+        previous.views.unshift(nextView); // returns length of array
+        const updated = previous.views;
 
         const data = {
           prevView,
