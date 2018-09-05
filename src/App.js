@@ -94,7 +94,7 @@ class App extends Component<Props, State> {
    if (!loaded) {
      return (
        <div>
-Loading...
+        Loading...
        </div>
      );
    }

@@ -17,8 +17,8 @@ export const headerSubheader = keyframes`
  }
 
 100% {
-  margin-top: 9px;
-  color: red;
+    margin-top: 9px;
+    color: red;
     font-size: 20px;
     font-weight: normal;
   };

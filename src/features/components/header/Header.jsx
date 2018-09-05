@@ -17,25 +17,14 @@ const Header = (props: Props) => {
   const { index, view, isGoingBack } = props;
   const { title } = view;
 
-  let newClass = '';
-  switch (index) {
-    case 0:
-      newClass = 'header';
-      break;
-    case 1:
-      newClass = 'sub-header';
-      break;
-    case 2:
-      newClass = 'leaving-header';
-      break;
-    default:
-  }
+  const headerClass = currentIndex => ({ 0: 'header', 1: 'sub-header', 2: 'leaving-header' }[currentIndex]);
 
-  console.log(title);
+  console.log(headerClass(index));
+  console.log(index, title);
   return (
     <TopBarWrapper id="appBar">
       <TitleText>
-        <AnimatedPageTitle isGoingBack={isGoingBack} newClass={newClass} title={title} />
+        <AnimatedPageTitle isGoingBack={isGoingBack} newClass={headerClass(index)} title={title} />
       </TitleText>
     </TopBarWrapper>
   );

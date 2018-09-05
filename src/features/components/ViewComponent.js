@@ -14,12 +14,6 @@ import HeaderContainer from './header/HeaderContainer';
 
 const GET_VIEWS = gql`
 {
-  currentView @client {
-    key
-    pathName
-    title
-    text
-  }
   prevView @client {
     key
     pathName
@@ -35,6 +29,11 @@ const GET_VIEWS = gql`
 }
 `;
 
+const REMOVE_VIEW = gql`
+  mutation removeViewFromStack {
+    removeViewFromStack @client
+  }
+`;
 
 type Props = {
   history: Object,
@@ -60,7 +59,6 @@ class ViewComponent extends Component<Props, State> {
   // prevView is used to determine if the animation is forward or backwards in the below animateNavigation function
 
   state = {
-    headerState: 0,
     prevView: {
       key: '',
       pathName: '',
@@ -72,57 +70,38 @@ class ViewComponent extends Component<Props, State> {
   // On component mount update the cached viewstack, view the updated stack,
   // and use the last two views to determine the viewState/transition effect
   async componentDidMount() {
-    const {
-      location, addToViewStack, client, title, text,
-    } = this.props;
-    const viewKey = location.key ? location.key : 'initialView';
+    const { client } = this.props;
 
-    const variables = {
-      pathName: location.pathname,
-      key: viewKey,
-      title,
-      text,
-    };
-
-    // First do a  GraphQL mutation with defined variables
-    // Then Query cache to get previous location and pass it to state
-    addToViewStack({ variables }).then(() => client.query({
-      query: GET_VIEWS,
-    }).then(({ data }) => this.setViewState(data)));
+    client
+      .query({ query: GET_VIEWS })
+      .then(({ data }) => this.setViewState(data));
   }
 
   // Set the previous view to state
   setViewState(data) {
     const { prevView } = data;
+    console.log(data);
     this.setState({
       prevView,
     });
   }
 
-  goBack = () => {
-    const { history } = this.props;
-    const { prevView } = this.state;
-
-    history.push({
-      pathname: prevView.pathName,
-      state: slideRight,
-    });
-  };
-
   // Using this function instead of react-router Link to navigate
-  animateNavigation = (path, title, text) => {
+  animateNavigation = (path) => {
     const { prevView } = this.state;
-    const { history } = this.props;
-
+    const {
+      history, location, addToViewStack, client, title, text,
+    } = this.props;
     const goingBack = prevView.pathName === path;
     const animationDirection = goingBack ? slideRight : slideLeft;
 
-    history.push({
-      pathname: path,
-      state: {
-        title, text, goingBack, ...animationDirection,
-      },
-    });
+    const variables = {
+      pathName: location.pathname, key: location.key, title, text,
+    };
+
+    // First do a  GraphQL mutation with defined variables
+    // Then Query cache to get previous location and pass it to state
+    addToViewStack({ variables });
   }
 
 

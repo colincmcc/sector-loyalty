@@ -42,14 +42,19 @@ const HeaderContainer = (props: Props) => (
       if (data) {
         const { state } = props.location;
         const { views } = data;
-
+        const renderedHeaders = views.slice(0, 4);
         const isGoingBack = state ? state.goingBack : false;
 
-
-        return (
-          views.map((view, index) => (
-            <Header key={shortid.generate()} isGoingBack={isGoingBack} index={index} view={view} allViews={views} />
-          )));
+        console.log(views);
+        return renderedHeaders.map((view, index) => (
+          <Header
+            key={shortid.generate()}
+            isGoingBack={isGoingBack}
+            index={index}
+            view={view}
+            allViews={views}
+          />
+        ));
       }
       return null;
     }
